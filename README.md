@@ -1,2 +1,2 @@
-# MyJavaStudyNotes
-个人Java学习笔记
+# MyStudyNotes
+个人编程学习笔记
