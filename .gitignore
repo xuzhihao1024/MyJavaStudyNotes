@@ -1,19 +1,4 @@
-.DS_Store
-.settings
-.project
-.classpath
-target
-bin
-*.log
-*.tlog
 .idea
-*.class
 
-# Package Files #
-*.jar
-*.war
-*.ear
-*.iml
 
-node_modules/
-dev/
+
