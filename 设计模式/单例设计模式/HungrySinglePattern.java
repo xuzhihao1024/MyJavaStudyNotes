@@ -8,10 +8,15 @@ package 单例设计模式;
  */
 public class HungrySinglePattern {
 
-    //加上final更加严谨,s就终身指向了new HungrySinglePattern() //将s锁住了
+    /**
+     * 加上final更加严谨,s就终身指向了new HungrySinglePattern()
+     * 将s锁住了
+     */
     private static final HungrySinglePattern hungrySinglePattern = new HungrySinglePattern();
 
-    //私有化构造函数
+    /**
+     * 私有化构造函数
+     */
     private HungrySinglePattern() {
     }
 
