@@ -14,7 +14,7 @@ public class LazySinglePattern {
     private LazySinglePattern() {
     }
 
-    //存在安全隐患
+    //多线程下存在安全隐患
     /*public static LazySinglePattern getLazySinglePattern() {
         lazySinglePattern = new LazySinglePattern();
         return lazySinglePattern;
