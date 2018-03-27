@@ -17,7 +17,6 @@ class Ticket implements Runnable {
                 /**
                  * run方法中的同步代码块需要获取obj对象锁，才能执行代码块中的show方法
                  */
-                // 锁是obj
                 synchronized (obj) {
                     /**
                      * 执行show方法则必须获取this对象锁，然后才能执行其中的同步代码块
@@ -25,6 +24,7 @@ class Ticket implements Runnable {
                      方法因无法获取到this对象锁无法执行，show方法中的同步代码块因无法获取到obj对象锁无法执行，就会产生死锁
                      */
                     //同步代码块里有同步函数
+                    System.out.println("run方法:"+Thread.currentThread().getName()+"获取了obj锁");
                     show();
                 }
             }
@@ -36,6 +36,7 @@ class Ticket implements Runnable {
     }
 
     public synchronized void show() {  //锁是this
+        System.out.println("show方法:"+Thread.currentThread().getName()+"获取了this锁");
         //同步函数里有同步代码块
         synchronized (obj) {
             if (num > 0) {
@@ -44,7 +45,7 @@ class Ticket implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(Thread.currentThread().getName() + "...function..." + num--);
+                System.out.println("show方法:"+Thread.currentThread().getName() + "...function获取了obj锁..." + num--);
             }
         }
     }
