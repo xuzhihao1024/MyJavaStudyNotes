@@ -1,4 +1,4 @@
-package deadlockdemo;
+package Java基础.多线程.deadlockdemo;
 
 /**
  * 死锁示例
@@ -17,13 +17,14 @@ class Ticket implements Runnable {
                 /**
                  * run方法中的同步代码块需要获取obj对象锁，才能执行代码块中的show方法
                  */
+                // 锁是obj
                 synchronized (obj) {
                     /**
                      * 执行show方法则必须获取this对象锁，然后才能执行其中的同步代码块
                      * 当线程t1获取到obj对象锁执行同步代码块，线程t2获取到this对象锁执行show方法。 同步代码块中的show
-                     方法因无法获取到this对象锁无法执行，show方法中的同步代码块因无法获取到obj对象锁无法执行，就会产生
-                     死锁
+                     方法因无法获取到this对象锁无法执行，show方法中的同步代码块因无法获取到obj对象锁无法执行，就会产生死锁
                      */
+                    //同步代码块里有同步函数
                     show();
                 }
             }
@@ -34,7 +35,8 @@ class Ticket implements Runnable {
         }
     }
 
-    public synchronized void show() {
+    public synchronized void show() {  //锁是this
+        //同步函数里有同步代码块
         synchronized (obj) {
             if (num > 0) {
                 try {

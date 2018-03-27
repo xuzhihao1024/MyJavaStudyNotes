@@ -1,4 +1,4 @@
-package deadlockdemo;
+package Java基础.多线程.deadlockdemo;
 
 class DeadLockDemo {
     public static void main(String[] args) {
@@ -7,11 +7,11 @@ class DeadLockDemo {
         Thread t2 = new Thread(t);
 
         t1.start();
-        try {
+        /*try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         t.flag = false;
         t2.start();
     }
