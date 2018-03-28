@@ -1,4 +1,4 @@
-package Java基础.多线程.deadlockdemo;
+package java基础.多线程.deadlockdemo;
 
 /**
  * 死锁示例
