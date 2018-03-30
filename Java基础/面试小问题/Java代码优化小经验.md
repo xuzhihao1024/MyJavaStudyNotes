@@ -105,40 +105,40 @@ if (i == 1)
 11、乘法和除法使用移位操作
 
 例如：
-
+```
 for (val = 0; val < 100000; val += 5)
 {
 　　a = val * 8;
 　　b = val / 2;
 }
-
+```
 用移位操作可以极大地提高性能，因为在计算机底层，对位的操作是最方便、最快的，因此建议修改为：
-
+```
 for (val = 0; val < 100000; val += 5)
 {
 　　a = val << 3;
 　　b = val >> 1;
 }
-
+```
 移位操作虽然快，但是可能会使代码不太好理解，因此最好加上相应的注释。
 
 12、循环内不要不断创建对象引用
 
 例如：
-
+```
 for (int i = 1; i <= count; i++)
 {
     Object obj = new Object();    
 }
-
+```
 这种做法会导致内存中有count份Object对象引用存在，count很大的话，就耗费内存了，建议为改为：
-
+```
 Object obj = null;
 for (int i = 0; i <= count; i++)
 {
     obj = new Object();
 }
-
+```
 这样的话，内存中只有一份Object对象引用，每次new Object()的时候，Object对象引用指向不同的Object罢了，但是内存中只有一份，这样就大大节省了内存空间了。
 
 13、基于效率和类型检查的考虑，应该尽可能使用array，无法确定数组大小时才使用ArrayList
@@ -162,12 +162,12 @@ for (int i = 0; i <= count; i++)
 17、尽量避免随意使用静态变量
 
 要知道，当某个对象被定义为static的变量所引用，那么gc通常是不会回收这个对象所占有的堆内存的，如：
-
+```
 public class A
 {
     private static B b = new B();  
 }
-
+```
 此时静态变量b的生命周期与A类相同，如果A类不被卸载，那么引用B指向的B对象会常驻内存，直到程序终止。
 
 18、及时清除不再需要的会话
@@ -177,7 +177,7 @@ public class A
 19、实现RandomAccess接口的集合比如ArrayList，应当使用最普通的for循环而不是foreach循环来遍历
 
 这是JDK推荐给用户的。JDK API对于RandomAccess接口的解释是：实现RandomAccess接口用来表明其支持快速随机访问，此接口的主要目的是允许一般的算法更改其行为，从而将其应用到随机或连续访问列表时能提供良好的性能。实际经验表明，实现RandomAccess接口的类实例，假如是随机访问的，使用普通for循环效率将高于使用foreach循环；反过来，如果是顺序访问的，则使用Iterator会效率更高。可以使用类似如下的代码作判断：
-
+```
 if (list instanceof RandomAccess)
 {
     for (int i = 0; i < list.size(); i++){}
@@ -187,7 +187,7 @@ else
     Iterator<?> iterator = list.iterable();
     while (iterator.hasNext()){iterator.next()}
 }
-
+```
 foreach循环的底层实现原理就是迭代器Iterator，参见Java语法糖1：可变长度参数以及foreach循环原理。所以后半句”反过来，如果是顺序访问的，则使用Iterator会效率更高”的意思就是顺序访问的那些类实例，使用foreach循环去遍历。
 
 20、使用同步代码块替代同步方法
@@ -231,21 +231,21 @@ public方法即对外提供的方法，如果给这些方法太多形参的话�
 28、字符串变量和字符串常量equals的时候将字符串常量写在前面
 
 这是一个比较常见的小技巧了，如果有以下代码：
-
+```
 String str = "123";
 if (str.equals("123"))
 {
     ...
 }
-
+```
 建议修改为：
-
+```
 String str = "123";
 if ("123".equals(str))
 {
     ...
 }
-
+```
 这么做主要是可以避免空指针异常
 
 29、请知道，在java中if (i == 1)和if (1 == i)是没有区别的，但从阅读习惯上讲，建议使用前者
@@ -253,7 +253,7 @@ if ("123".equals(str))
 平时有人问，”if (i == 1)”和”if (1== i)”有没有区别，这就要从C/C++讲起。
 
 在C/C++中，”if (i == 1)”判断条件成立，是以0与非0为基准的，0表示false，非0表示true，如果有这么一段代码：
-
+```
 int i = 2;
 if (i == 1)
 {
@@ -263,9 +263,9 @@ else
 {
     ...
 }
-
+```
 C/C++判断”i==1″不成立，所以以0表示，即false。但是如果：
-
+```
 int i = 2;
 if (i = 1)
 {
@@ -275,9 +275,9 @@ else
 {
     ...
 }
-
+```
 万一程序员一个不小心，把”if (i == 1)”写成”if (i = 1)”，这样就有问题了。在if之内将i赋值为1，if判断里面的内容非0，返回的就是true了，但是明明i为2，比较的值是1，应该返回的false。这种情况在C/C++的开发中是很可能发生的并且会导致一些难以理解的错误产生，所以，为了避免开发者在if语句中不正确的赋值操作，建议将if语句写为：
-
+```
 int i = 2;
 if (1 == i)
 {
@@ -287,7 +287,7 @@ else
 {
     ...
 }
-
+```
 这样，即使开发者不小心写成了”1 = i”，C/C++编译器也可以第一时间检查出来，因为我们可以对一个变量赋值i为1，但是不能对一个常量赋值1为i。
 
 但是，在Java中，C/C++这种”if (i = 1)”的语法是不可能出现的，因为一旦写了这种语法，Java就会编译报错”Type mismatch: cannot convert from int to boolean“。但是，尽管Java的”if (i == 1)”和”if (1 == i)”在语义上没有任何区别，但是从阅读习惯上讲，建议使用前者会更好些。
@@ -295,13 +295,13 @@ else
 30、不要对数组使用toString()方法
 
 看一下对数组使用toString()打印出来的是什么：
-
+```
 public static void main(String[] args)
 {
     int[] is = new int[]{1, 2, 3};
     System.out.println(is.toString());
 }
-
+```
 结果是：
 
 [I@18a992f
@@ -311,14 +311,14 @@ public static void main(String[] args)
 32、不要对超出范围的基本数据类型做向下强制转型
 
 这绝不会得到想要的结果：
-
+```
 public static void main(String[] args)
 {
     long l = 12345678901234L;
     int i = (int)l;
     System.out.println(i);
 }
-
+```
 我们可能期望得到其中的某几位，但是结果却是：
 
 1942892530
@@ -344,7 +344,7 @@ public static void main(String[] args)
 34、把一个基本数据类型转为字符串，基本数据类型.toString()是最快的方式、String.valueOf(数据)次之、数据+”"最慢
 
 把一个基本数据类型转为一般有三种方式，我有一个Integer型数据i，可以使用i.toString()、String.valueOf(i)、i+”"三种方式，三种方式的效率如何，看一个测试：
-
+```
 public static void main(String[] args)
 {
     int loopTime = 50000;
@@ -368,7 +368,7 @@ public static void main(String[] args)
     }    
     System.out.println("i + \"\"：" + (System.currentTimeMillis() - startTime) + "ms");
 }
-
+```
 运行结果为：
 
 String.valueOf()：11ms
@@ -388,7 +388,7 @@ i + ""：25ms
 35、使用最有效率的方式去遍历Map
 
 遍历Map的方式有很多，通常场景下我们需要的是遍历Map中的Key和Value，那么推荐使用的、效率最高的方式是：
-
+```
 public static void main(String[] args)
 {
     HashMap<String, String> hm = new HashMap<String, String>();
@@ -402,13 +402,13 @@ public static void main(String[] args)
         System.out.println(entry.getKey() + "\t" + entry.getValue());
     }
 }
-
+```
 如果你只是想遍历一下这个Map的key值，那用”Set<String> keySet = hm.keySet();”会比较合适一些
 
 36、对资源的close()建议分开操作
 
 意思是，比如我有这么一段代码：
-
+```
 try
 {
     XXX.close();
@@ -418,9 +418,9 @@ catch (Exception e)
 {
     ...
 }
-
+```
 建议修改为：
-
+```
 try
 {
     XXX.close();
@@ -437,7 +437,7 @@ catch (Exception e)
 {
     ...
 }
-
+```
 虽然有些麻烦，却能避免资源泄露。我们想，如果没有修改过的代码，万一XXX.close()抛异常了，那么就进入了catch块中了，YYY.close()不会执行，YYY这块资源就不会回收了，一直占用着，这样的代码一多，是可能引起资源句柄泄露的。而改为下面的写法之后，就保证了无论如何XXX和YYY都会被close掉
 
 37、对于ThreadLocal使用前或者使用后一定要先remove
@@ -445,11 +445,11 @@ catch (Exception e)
 当前基本所有的项目都使用了线程池技术，这非常好，可以动态配置线程数、可以重用线程。
 
 然而，如果你在项目中使用到了ThreadLocal，一定要记得使用前或者使用后remove一下。这是因为上面提到了线程池技术做的是一个线程重用，这意味着代码运行过程中，一条线程使用完毕，并不会被销毁而是等待下一次的使用。我们看一下Thread类中，持有ThreadLocal.ThreadLocalMap的引用：
-
+```
 /* ThreadLocal values pertaining to this thread. This map is maintained
  * by the ThreadLocal class. */
 ThreadLocal.ThreadLocalMap threadLocals = null;
-
+```
 线程不销毁意味着上条线程set的ThreadLocal.ThreadLocalMap中的数据依然存在，那么在下一条线程重用这个Thread的时候，很可能get到的是上条线程set的数据而不是自己想要的内容。
 
 这个问题非常隐晦，一旦出现这个原因导致的错误，没有相关经验或者没有扎实的基础非常难发现这个问题，因此在写代码的时候就要注意这一点，这将给你后续减少很多的工作量。
