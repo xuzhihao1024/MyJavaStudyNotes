@@ -1,9 +1,9 @@
+# Java7 HashMap
 >来源：JavaDoop，
  javadoop.com/post/hashmap
 
 >阅读前提：本文分析的是源码，所以至少读者要熟悉它们的接口使用，同时，对于并发，读者至少要知道 CAS、ReentrantLock、UNSAFE 操作这几个基本的知识，文中不会对这些知识进行介绍。Java8 用到了红黑树，不过本文不会进行展开，感兴趣的读者请自行查找相关资料。
 
-Java7 HashMap
 
 HashMap 是最简单的，一来我们非常熟悉，二来就是它不支持并发操作，所以源码也非常简单。
 
